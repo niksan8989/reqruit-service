@@ -3,7 +3,7 @@
 namespace app\models\query;
 
 /**
- * This is the ActiveQuery class for [[\app\models\Assignment]].
+ * This is the ActiveQuery class for [[\app\models\AssignmentSearch]].
  *
  * @see \app\models\Assignment
  */
