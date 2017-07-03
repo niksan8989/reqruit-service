@@ -36,10 +36,19 @@ AppAsset::register($this);
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+        'activateParents' => true,
+        'items' => array_filter([
+            ['label' => 'Employees', 'url' => ['/employee/index']],
+            ['label' => 'Interviews', 'url' => ['/interview/index']],
+            ['label' => 'Contracts', 'url' => ['/contract/index']],
+            ['label' => 'Positions', 'url' => ['/positions/index']],
+            ['label' => 'Orders', 'url' => ['/order/index'], 'items' => [
+                ['label' => 'Recruit', 'url' => ['/recruit/index']],
+                ['label' => 'Assignment', 'url' => ['/assignment/index']],
+                ['label' => 'Vacation', 'url' => ['/vacation/index']],
+                ['label' => 'Dismiss', 'url' => ['/dismiss/index']],
+                ['label' => 'Bonus', 'url' => ['/bonus/index']],
+            ]],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
@@ -52,7 +61,7 @@ AppAsset::register($this);
                 . Html::endForm()
                 . '</li>'
             )
-        ],
+        ]),
     ]);
     NavBar::end();
     ?>
