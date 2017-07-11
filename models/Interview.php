@@ -126,6 +126,24 @@ class Interview extends \yii\db\ActiveRecord
         return new \app\models\query\InterviewQuery(get_called_class());
     }
 
+    public static function create($last_name, $first_name, $email, $date)
+    {
+        $interview = new Interview();
+        $interview->date = $date;
+        $interview->first_name = $first_name;
+        $interview->last_name = $last_name;
+        $interview->email = $email;
+        $interview->status = Interview::STATUS_NEW;
+        return $interview;
+    }
+
+    public function editData($last_name, $first_name, $email)
+    {
+        $this->last_name = $last_name;
+        $this->first_name = $first_name;
+        $this->email = $email;
+    }
+
     public function afterSave($insert, $changedAttributes)
     {
         if (in_array('status', $changedAttributes) && $this->status != $changedAttributes['status']) {

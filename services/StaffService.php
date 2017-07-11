@@ -9,13 +9,9 @@ use app\models\Interview;
 class StaffService
 {
     public function joinToInterview($last_name, $first_name, $email, $date) {
-        $interview = new Interview();
-        $interview->date = $date;
-        $interview->first_name = $first_name;
-        $interview->last_name = $last_name;
-        $interview->email = $email;
-        $interview->status = Interview::STATUS_NEW;
-        $interview->save();
+
+        $interview = Interview::create($last_name, $first_name, $email, $date);
+        $interview->save(false);
 
         if ($interview->email) {
             Yii::$app->mailer->compose('interview/join', ['model' => $this])
@@ -26,9 +22,26 @@ class StaffService
         }
 
         $log = new Log();
-        $log->message = $interview->first_name . ' ' . $interview->last_name . ' is joined to interview';
+        $log->message = 'Interview ' . $interview->id . ' is created';
         $log->save();
 
         return $interview;
+    }
+
+    public function editInterview($id, $last_name, $first_name, $email){
+        /**
+         * @var Interview $interview
+         */
+        if (!$interview = Interview::findOne($id)) {
+            throw new \InvalidArgumentException('Model not found');
+        }
+
+        $interview->editData($last_name, $first_name, $email);
+
+        $interview->save(false);
+
+        $log = new Log();
+        $log->message = 'Interview ' . $interview->id . ' is updated';
+        $log->save();
     }
 }
