@@ -11,6 +11,9 @@ $this->params['breadcrumbs'][] = ['label' => 'Employees', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="employee-view">
+    <?php if(Yii::$app->session->hasFlash('success')) { ?>
+        <div class="alert alert-success"><?= Yii::$app->session->getFlash('success') ?></div>
+    <?php } ?>
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -33,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'last_name',
             'address',
             'email:email',
-            'status',
+            'statusName',
         ],
     ]) ?>
 

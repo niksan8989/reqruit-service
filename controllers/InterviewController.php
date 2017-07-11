@@ -64,6 +64,7 @@ class InterviewController extends Controller
     public function actionCreate()
     {
         $model = new Interview();
+        $model->scenario = Interview::SCENARIO_CREATE;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

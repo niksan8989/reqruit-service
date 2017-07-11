@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%employee}}".
@@ -23,6 +24,38 @@ use Yii;
  */
 class Employee extends \yii\db\ActiveRecord
 {
+    const STATUS_PROBATION = 1;
+    const STATUS_WORK = 2;
+    const STATUS_VACATION = 3;
+    const STATUS_DISMISS = 4;
+
+    const SCENARIO_CREATE = 'create';
+
+    public $order_date;
+    public $contract_date;
+    public $recruit_date;
+
+
+    public static function getStatusList()
+    {
+        return [
+            self::STATUS_PROBATION => 'Probation',
+            self::STATUS_WORK => 'Work',
+            self::STATUS_VACATION => 'Vacation',
+            self::STATUS_DISMISS => 'Dismiss',
+        ];
+    }
+
+    public function getStatusName()
+    {
+        return ArrayHelper::getValue(self::getStatusList(), $this->status);
+    }
+
+    public function getFullName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
     /**
      * @inheritdoc
      */
@@ -39,6 +72,8 @@ class Employee extends \yii\db\ActiveRecord
         return [
             [['first_name', 'last_name', 'address', 'status'], 'required'],
             [['status'], 'integer'],
+            [['order_date', 'contract_date', 'recruit_date'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['order_date', 'contract_date', 'recruit_date'], 'date', 'format' => 'php:Y-m-d', 'on' => self::SCENARIO_CREATE],
             [['first_name', 'last_name', 'address', 'email'], 'string', 'max' => 255],
         ];
     }

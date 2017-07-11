@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Interview;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -20,11 +21,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?php if ($model->scenario == Interview::SCENARIO_DEFAULT) {  ?>
 
-    <?= $form->field($model, 'reject_reason')->textarea(['rows' => 6]) ?>
+        <?= $form->field($model, 'status')->dropDownList($model->getNextStatusList()) ?>
 
-    <?= $form->field($model, 'employee_id')->textInput() ?>
+        <?= $form->field($model, 'reject_reason')->textarea(['rows' => 6]) ?>
+
+        <?= $form->field($model, 'employee_id')->textInput() ?>
+
+    <?php }  ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

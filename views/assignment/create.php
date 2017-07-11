@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Assignment */
 
-$this->title = 'Create AssignmentSearch';
+$this->title = 'Create Assignment';
 $this->params['breadcrumbs'][] = ['label' => 'Assignments', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

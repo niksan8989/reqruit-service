@@ -41,7 +41,7 @@ AppAsset::register($this);
             ['label' => 'Employees', 'url' => ['/employee/index']],
             ['label' => 'Interviews', 'url' => ['/interview/index']],
             ['label' => 'Contracts', 'url' => ['/contract/index']],
-            ['label' => 'Positions', 'url' => ['/positions/index']],
+            ['label' => 'Positions', 'url' => ['/position/index']],
             ['label' => 'Orders', 'url' => ['/order/index'], 'items' => [
                 ['label' => 'Recruit', 'url' => ['/recruit/index']],
                 ['label' => 'Assignment', 'url' => ['/assignment/index']],
