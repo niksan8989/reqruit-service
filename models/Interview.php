@@ -130,16 +130,6 @@ class Interview extends \yii\db\ActiveRecord
     {
         if (in_array('status', $changedAttributes) && $this->status != $changedAttributes['status']) {
             if ($this->status == self::STATUS_NEW) {
-                if ($this->email) {
-                    Yii::$app->mailer->compose('interview/join', ['model' => $this])
-                        ->setFrom(Yii::$app->params['adminEmail'])
-                        ->setTo($this->email)
-                        ->setSubject('You are joined to the interview')
-                        ->send();
-                }
-                $log = new Log();
-                $log->message = $this->first_name . ' ' . $this->last_name . ' is joined to interview';
-                $log->save();
 
             } elseif ($this->status == self::STATUS_PASS) {
                 if ($this->email) {

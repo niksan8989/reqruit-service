@@ -8,8 +8,8 @@ use yii\base\Model;
 class InterviewJoinForm extends Model
 {
     public $date;
-    public $first_name;
-    public $last_name;
+    public $firstName;
+    public $lastName;
     public $email;
 
     public function init()
@@ -20,9 +20,9 @@ class InterviewJoinForm extends Model
     public function rules()
     {
         return [
-            [['date', 'first_name', 'last_name'], 'required'],
+            [['date', 'firstName', 'lastName'], 'required'],
             [['date'], 'date', 'format' => 'php:Y-m-d'],
-            [['first_name', 'last_name', 'email'], 'string', 'max' => 255],
+            [['firstName', 'lastName', 'email'], 'string', 'max' => 255],
             [['email'], 'email']
         ];
     }
@@ -31,8 +31,8 @@ class InterviewJoinForm extends Model
     {
         return [
             'date' => 'Date',
-            'first_name' => 'First Name',
-            'last_name' => 'Last Name',
+            'firstName' => 'First Name',
+            'lastName' => 'Last Name',
             'email' => 'Email',
         ];
     }

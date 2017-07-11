@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\forms\InterviewJoinForm;
+use app\services\StaffService;
 use Yii;
 use app\models\Interview;
 use app\models\search\InterviewSearch;
@@ -73,6 +75,29 @@ class InterviewController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+
+    public function actionJoin()
+    {
+        $form = new InterviewJoinForm();
+
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+
+            $service = new StaffService();
+
+            $model = $service->joinToInterview(
+                $form->lastName,
+                $form->firstName,
+                $form->email,
+                $form->date
+            );
+
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+        return $this->render('join', [
+            'joinForm' => $form,
+        ]);
     }
 
     /**
