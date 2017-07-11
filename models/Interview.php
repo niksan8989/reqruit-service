@@ -144,6 +144,12 @@ class Interview extends \yii\db\ActiveRecord
         $this->email = $email;
     }
 
+    public function reject($reason)
+    {
+        $this->reject_reason = $reason;
+        $this->status = self::STATUS_REJECT;
+    }
+
     public function afterSave($insert, $changedAttributes)
     {
         if (in_array('status', $changedAttributes) && $this->status != $changedAttributes['status']) {

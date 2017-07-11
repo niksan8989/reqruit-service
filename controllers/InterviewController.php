@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\forms\InterviewEditForm;
 use app\forms\InterviewJoinForm;
+use app\forms\InterviewRejectForm;
 use app\forms\InterviewUpdateForm;
 use app\services\StaffService;
 use Yii;
@@ -131,6 +132,29 @@ class InterviewController extends Controller
                 'model' => $interview,
             ]);
         }
+    }
+
+    public function actionReject($id)
+    {
+        $interview = $this->findModel($id);
+
+        $form = new InterviewRejectForm();
+
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+
+            $service = new StaffService();
+
+            $service->rejectInterview(
+                $interview->id,
+                $form->reason
+            );
+
+            return $this->redirect(['view', 'id' => $interview->id]);
+        }
+        return $this->render('reject', [
+            'rejectForm' => $form,
+            'model' => $interview,
+        ]);
     }
 
     /**

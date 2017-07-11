@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
 
     <?php if ($model->scenario == Interview::SCENARIO_DEFAULT) {  ?>
 
-        <?= $form->field($model, 'status')->dropDownList($model->getNextStatusList()) ?>
+        <?= $form->field($model, 'status')->dropDownList($model->getStatusList()) ?>
 
         <?= $form->field($model, 'reject_reason')->textarea(['rows' => 6]) ?>
 
