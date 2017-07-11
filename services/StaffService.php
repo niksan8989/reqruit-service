@@ -3,14 +3,24 @@
 namespace app\services;
 
 use app\models\Log;
+use app\repositories\InterviewRepository;
 use Yii;
 use app\models\Interview;
 
 class StaffService
 {
+    private $interviewRepository;
+
+    public function __construct(InterviewRepository $interviewRepository)
+    {
+       $this->interviwRepository = $interviewRepository;
+    }
+
     public function joinToInterview($last_name, $first_name, $email, $date) {
 
         $interview = Interview::create($last_name, $first_name, $email, $date);
+
+        $this->interviwRepository->add($interview);
         $interview->save(false);
 
         if ($interview->email) {
@@ -24,33 +34,20 @@ class StaffService
 
     public function editInterview($id, $last_name, $first_name, $email){
 
-        $interview = $this->findInterviewModel($id);
+        $interview = $this->interviwRepository->find($id);
         $interview->editData($last_name, $first_name, $email);
-        $interview->save(false);
 
+        $this->interviwRepository->save($interview);
         $this->log('Interview ' . $interview->id . ' is updated');
     }
 
     public function rejectInterview($id, $reason) {
 
-        $interview = $this->findInterviewModel($id);
+        $interview = $this->interviwRepository->find($id);
         $interview->reject($reason);
-        $interview->save(false);
+        $this->interviwRepository->save($interview);
 
         $this->log('Interview ' . $interview->id . ' is rejected');
-    }
-
-    /**
-     * @param $id
-     * @return Interview
-     * @throws \InvalidArgumentException
-     */
-    protected function findInterviewModel($id){
-        if (($model = Interview::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new \InvalidArgumentException('Model not found');
-        }
     }
 
     protected function log($message){
