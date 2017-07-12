@@ -5,7 +5,6 @@ namespace app\controllers;
 use app\forms\InterviewEditForm;
 use app\forms\InterviewJoinForm;
 use app\forms\InterviewRejectForm;
-use app\forms\InterviewUpdateForm;
 use app\services\StaffService;
 use Yii;
 use app\models\Interview;
@@ -19,6 +18,14 @@ use yii\filters\VerbFilter;
  */
 class InterviewController extends Controller
 {
+
+    public $staffService;
+
+    public function __construct($id, $module, StaffService $staffService, $config = [])
+    {
+        $this->staffService = $staffService;
+        parent::__construct($id, $module,  $config = []);
+    }
     /**
      * @inheritdoc
      */
@@ -87,7 +94,7 @@ class InterviewController extends Controller
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
 
-            $service = new StaffService();
+            $service = Yii::$container->get(StaffService::class);
 
             $model = $service->joinToInterview(
                 $form->lastName,
@@ -116,9 +123,7 @@ class InterviewController extends Controller
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
 
-            $service = new StaffService();
-
-            $service->editInterview(
+            $this->staffService->editInterview(
                 $interview->id,
                 $form->lastName,
                 $form->firstName,
@@ -141,10 +146,7 @@ class InterviewController extends Controller
         $form = new InterviewRejectForm();
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
-
-            $service = new StaffService();
-
-            $service->rejectInterview(
+            $this->staffService->rejectInterview(
                 $interview->id,
                 $form->reason
             );

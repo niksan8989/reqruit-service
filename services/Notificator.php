@@ -4,7 +4,7 @@ namespace app\services;
 
 use Yii;
 
-class Notificator
+class Notificator implements NotificatorInterface
 {
     /**
      * @param $view

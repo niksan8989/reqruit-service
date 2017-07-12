@@ -4,7 +4,7 @@ namespace app\repositories;
 
 use app\models\Interview;
 
-class InterviewRepository
+class InterviewRepository implements InterviewRepositoryInterface
 {
     /**
      * @param $id

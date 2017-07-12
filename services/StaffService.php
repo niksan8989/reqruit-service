@@ -2,7 +2,7 @@
 
 namespace app\services;
 
-use app\repositories\InterviewRepository;
+use app\repositories\InterviewRepositoryInterface;
 use Yii;
 use app\models\Interview;
 
@@ -13,9 +13,9 @@ class StaffService
     private $notificator;
 
     public function __construct(
-        InterviewRepository $interviewRepository,
-        Logger $logger,
-        Notificator $notificator
+        InterviewRepositoryInterface $interviewRepository,
+        LoggerInterface $logger,
+        NotificatorInterface $notificator
     ) {
        $this->interviewRepository = $interviewRepository;
        $this->logger = $logger;

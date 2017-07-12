@@ -146,8 +146,14 @@ class Interview extends \yii\db\ActiveRecord
 
     public function reject($reason)
     {
+        $this->guardNotRejected();
         $this->reject_reason = $reason;
         $this->status = self::STATUS_REJECT;
+    }
+
+    public function isRecruitable()
+    {
+        return $this->status == self::STATUS_PASS;
     }
 
     public function afterSave($insert, $changedAttributes)
@@ -167,18 +173,16 @@ class Interview extends \yii\db\ActiveRecord
                 $log->message = $this->first_name . ' ' . $this->last_name . ' is passed the interview';
                 $log->save();
             } elseif ($this->status == self::STATUS_REJECT) {
-                if ($this->email) {
-                    Yii::$app->mailer->compose('interview/reject', ['model' => $this])
-                        ->setFrom(Yii::$app->params['adminEmail'])
-                        ->setTo($this->email)
-                        ->setSubject('You are failed the interview')
-                        ->send();
-                }
-                $log = new Log();
-                $log->message = $this->first_name . ' ' . $this->last_name . ' is failed to interview';
-                $log->save();
+
             }
         }
         parent::afterSave($insert, $changedAttributes);
+    }
+
+    protected function guardNotRejected()
+    {
+        if ($this->status == self::STATUS_REJECT) {
+            throw new \DomainException('Interview is already rejected');
+        }
     }
 }
