@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\forms\EmployeeCreateForm;
 use app\forms\InterviewJoinForm;
 use app\models\Contract;
 use app\models\Interview;
@@ -20,6 +21,14 @@ use yii\filters\VerbFilter;
  */
 class EmployeeController extends Controller
 {
+    public $staffService;
+
+    public function __construct($id, $module, StaffService $staffService, $config = [])
+    {
+        $this->staffService = $staffService;
+        parent::__construct($id, $module,  $config = []);
+    }
+
     /**
      * @inheritdoc
      */
@@ -67,7 +76,33 @@ class EmployeeController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($interview_id = null)
+
+    public function actionCreate($interview_id = null){
+
+        $interview = $this->findInterviewModel($interview_id);
+        $form = new EmployeeCreateForm($interview);
+
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            $model = $this->staffService->createEmployee(
+                $interview->id,
+                $form->lastName,
+                $form->firstName,
+                $form->email,
+                $form->address,
+                $form->orderDate,
+                $form->contractDate,
+                $form->recruitDate
+            );
+
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('create', [
+                'model' => $form,
+            ]);
+        }
+    }
+
+    /*public function actionCreate($interview_id = null)
     {
         $model = new Employee();
         $model->scenario = Employee::SCENARIO_CREATE;
@@ -123,7 +158,7 @@ class EmployeeController extends Controller
                 'model' => $model,
             ]);
         }
-    }
+    }*/
 
     /**
      * Updates an existing Employee model.

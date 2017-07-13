@@ -56,6 +56,16 @@ class Employee extends \yii\db\ActiveRecord
         return $this->first_name . ' ' . $this->last_name;
     }
 
+    public static function create($last_name, $first_name, $address, $email)
+    {
+        $employee = new self();
+        $employee->last_name = $last_name;
+        $employee->first_name = $first_name;
+        $employee->address = $address;
+        $employee->email = $email;
+        return $employee;
+    }
+
     /**
      * @inheritdoc
      */

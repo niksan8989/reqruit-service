@@ -106,6 +106,13 @@ class Interview extends \yii\db\ActiveRecord
         $this->status = self::STATUS_REJECT;
     }
 
+    public function pass($employee_id)
+    {
+        $this->guardNotPassed();
+        $this->employee_id = $employee_id;
+        $this->status = Interview::STATUS_PASS;
+    }
+
     public function isRecruitable()
     {
         return $this->status == self::STATUS_PASS;
@@ -114,6 +121,13 @@ class Interview extends \yii\db\ActiveRecord
     protected function guardNotRejected()
     {
         if ($this->status == self::STATUS_REJECT) {
+            throw new \DomainException('Interview is already rejected');
+        }
+    }
+
+    protected function guardNotPassed()
+    {
+        if ($this->status == self::STATUS_PASS) {
             throw new \DomainException('Interview is already rejected');
         }
     }

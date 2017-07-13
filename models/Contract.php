@@ -63,4 +63,14 @@ class Contract extends \yii\db\ActiveRecord
     {
         return new \app\models\query\ContractQuery(get_called_class());
     }
+
+    public static function create($employee_id, $first_name, $last_name, $contract_date)
+    {
+        $contract = new self();
+        $contract->employee_id = $employee_id;
+        $contract->first_name = $first_name;
+        $contract->last_name = $last_name;
+        $contract->date_open = $contract_date;
+        return $contract;
+    }
 }

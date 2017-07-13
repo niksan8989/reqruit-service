@@ -96,4 +96,11 @@ class Order extends \yii\db\ActiveRecord
     {
         return new \app\models\query\OrderQuery(get_called_class());
     }
+
+    public static function create($order_date)
+    {
+        $order = new self();
+        $order->date = $order_date;
+        return $order;
+    }
 }
