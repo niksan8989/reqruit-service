@@ -63,6 +63,7 @@ class Employee extends \yii\db\ActiveRecord
         $employee->first_name = $first_name;
         $employee->address = $address;
         $employee->email = $email;
+        $employee->status = self::STATUS_PROBATION;
         return $employee;
     }
 
@@ -72,20 +73,6 @@ class Employee extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return '{{%employee}}';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['first_name', 'last_name', 'address', 'status'], 'required'],
-            [['status'], 'integer'],
-            [['order_date', 'contract_date', 'recruit_date'], 'required', 'on' => self::SCENARIO_CREATE],
-            [['order_date', 'contract_date', 'recruit_date'], 'date', 'format' => 'php:Y-m-d', 'on' => self::SCENARIO_CREATE],
-            [['first_name', 'last_name', 'address', 'email'], 'string', 'max' => 255],
-        ];
     }
 
     /**

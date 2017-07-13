@@ -95,4 +95,25 @@ class Assignment extends \yii\db\ActiveRecord
     {
         return new \app\models\query\AssignmentQuery(get_called_class());
     }
+
+    public static function create(
+        $order_id,
+        $employee_id,
+        $position_id,
+        $date,
+        $rate,
+        $salary,
+        $active
+    )
+    {
+        $assignment = new self();
+        $assignment->order_id = $order_id;
+        $assignment->employee_id = $employee_id;
+        $assignment->position_id = $position_id;
+        $assignment->date = $date;
+        $assignment->rate = $rate;
+        $assignment->salary = $salary;
+        $assignment->active = $active;
+        return $assignment;
+    }
 }

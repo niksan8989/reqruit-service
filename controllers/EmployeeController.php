@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\forms\EmployeeAssignForm;
 use app\forms\EmployeeCreateForm;
 use app\forms\InterviewJoinForm;
 use app\models\Contract;
@@ -77,13 +78,13 @@ class EmployeeController extends Controller
      * @return mixed
      */
 
-    public function actionCreate($interview_id = null){
+    public function actionCreate($id = null){
 
-        $interview = $this->findInterviewModel($interview_id);
+        $interview = $this->findInterviewModel($id);
         $form = new EmployeeCreateForm($interview);
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
-            $model = $this->staffService->createEmployee(
+            $employee = $this->staffService->createEmployee(
                 $interview->id,
                 $form->lastName,
                 $form->firstName,
@@ -94,71 +95,36 @@ class EmployeeController extends Controller
                 $form->recruitDate
             );
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $employee->id]);
         } else {
             return $this->render('create', [
-                'model' => $form,
+                'createForm' => $form,
             ]);
         }
     }
 
-    /*public function actionCreate($interview_id = null)
+    public function actionAssign($id = null)
     {
-        $model = new Employee();
-        $model->scenario = Employee::SCENARIO_CREATE;
-        $model->order_date = date('Y-m-d');
-        $model->contract_date = date('Y-m-d');
-        $model->recruit_date = date('Y-m-d');
+        $employee = $this->findModel($id);
+        $form = new EmployeeAssignForm();
 
-        if ($interview_id) {
-            $interview = $this->findInterviewModel($interview_id);
-            $model->first_name = $interview->first_name;
-            $model->last_name = $interview->last_name;
-            $model->email = $interview->email;
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            $assign = $this->staffService->assignEmployee(
+                $employee->id,
+                $form->positionID,
+                $form->date,
+                $form->rate,
+                $form->salary,
+                $form->active
+            );
+
+            return $this->redirect(['assignment/view', 'id' => $assign->id]);
         } else {
-            $interview = null;
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $transaction = Yii::$app->db->beginTransaction();
-            try {
-                if ($interview) {
-                    $interview->status = Interview::STATUS_PASS;
-                    $interview->save();
-                }
-                $model->save(false);
-
-                $order = new Order();
-                $order->date = $model->order_date;
-                $order->save(false);
-
-                $contract = new Contract();
-                $contract->employee_id = $model->id;
-                $contract->first_name = $model->first_name;
-                $contract->last_name = $model->last_name;
-                $contract->date_open = $model->contract_date;
-                $contract->save(false);
-
-                $recruit = new Recruit();
-                $recruit->employee_id = $model->id;
-                $recruit->order_id = $order->id;
-                $recruit->date = $model->recruit_date;
-                $recruit->save(false);
-
-                $transaction->commit();
-
-                Yii::$app->session->setFlash('success', 'Employee is recruit');
-                return $this->redirect(['view', 'id' => $model->id]);
-            } catch (\Exception $e) {
-                $transaction->rollBack();
-                throw $e;
-            }
-        } else {
-            return $this->render('create', [
-                'model' => $model,
+            return $this->render('assign', [
+                'assignForm' => $form,
             ]);
         }
-    }*/
+    }
 
     /**
      * Updates an existing Employee model.

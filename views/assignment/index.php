@@ -26,8 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'order_id',
-            'employee_id',
-            'position_id',
+            [
+                'attribute' => 'employee_id',
+                'value' => 'employee.fullName'
+            ],
+            [
+                'attribute' => 'position_id',
+                'value' => 'position.name'
+            ],
             'date',
             // 'rate',
             // 'salary',

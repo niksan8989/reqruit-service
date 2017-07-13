@@ -2,9 +2,11 @@
 
 namespace app\services;
 
+use app\models\Assignment;
 use app\models\Contract;
 use app\models\Employee;
 use app\models\Order;
+use app\models\Position;
 use app\models\Recruit;
 use app\repositories\ContractRepositoryInterface;
 use app\repositories\EmployeeRepositoryInterface;
@@ -132,6 +134,35 @@ class StaffService
         }
 
         return $employee;
+    }
+
+    public function assignEmployee(
+        $employee_id,
+        $position_id,
+        $date,
+        $rate,
+        $salary,
+        $active
+    )
+    {
+
+        $order = Order::create($date);
+        $this->orderRepository->add($order);
+
+        $assignment = Assignment::create(
+            $order->id,
+            $employee_id,
+            $position_id,
+            $date,
+            $rate,
+            $salary,
+            $active
+        );
+
+        $assignment->save(false);
+
+        return $assignment;
+
     }
 
 }

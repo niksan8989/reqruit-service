@@ -115,7 +115,7 @@ class Interview extends \yii\db\ActiveRecord
 
     public function isRecruitable()
     {
-        return $this->status == self::STATUS_PASS;
+        return $this->status != self::STATUS_PASS;
     }
 
     protected function guardNotRejected()
