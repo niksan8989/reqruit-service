@@ -12,6 +12,7 @@ use app\repositories\ContractRepositoryInterface;
 use app\repositories\EmployeeRepositoryInterface;
 use app\repositories\InterviewRepositoryInterface;
 use app\repositories\OrderRepositoryInterface;
+use app\repositories\PositionRepositoryInterface;
 use Yii;
 use app\models\Interview;
 
@@ -21,6 +22,7 @@ class StaffService
     private $employeeRepository;
     private $orderRepository;
     private $contractRepository;
+    private $positionRepository;
     private $transactionManager;
     private $logger;
     private $notificator;
@@ -30,6 +32,7 @@ class StaffService
         EmployeeRepositoryInterface $employeeRepository,
         OrderRepositoryInterface $orderRepository,
         ContractRepositoryInterface $contractRepository,
+        PositionRepositoryInterface $positionRepository,
         TransactionManager $transactionManager,
         LoggerInterface $logger,
         NotificatorInterface $notificator
@@ -38,6 +41,7 @@ class StaffService
        $this->employeeRepository = $employeeRepository;
        $this->orderRepository = $orderRepository;
        $this->contractRepository = $contractRepository;
+       $this->positionRepository = $positionRepository;
        $this->transactionManager = $transactionManager;
        $this->logger = $logger;
        $this->notificator = $notificator;
@@ -149,10 +153,13 @@ class StaffService
         $order = Order::create($date);
         $this->orderRepository->add($order);
 
+        $employee = $this->employeeRepository->find($employee_id);
+        $position = $this->positionRepository->find($position_id);
+
         $assignment = Assignment::create(
             $order->id,
-            $employee_id,
-            $position_id,
+            $employee->id,
+            $position->id,
             $date,
             $rate,
             $salary,
@@ -160,6 +167,8 @@ class StaffService
         );
 
         $assignment->save(false);
+
+        $this->logger->log('Employee ' . $employee->id . ' is assignment to position ' . $position->id);
 
         return $assignment;
 
